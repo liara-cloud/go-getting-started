@@ -92,7 +92,7 @@ func (client *Client) write() {
 	}
 }
 
-func serveWS(hub *MessageHub, w http.ResponseWriter, r *http.Request) {
+func serves(hub *MessageHub, w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Println("Error upgrading connection:", err)
@@ -109,8 +109,8 @@ func main() {
 	hub := newHub()
 	go hub.run()
 
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		serveWS(hub, w, r)
+	http.HandleFunc("/wss", func(w http.ResponseWriter, r *http.Request) {
+		serves(hub, w, r)
 	})
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/", fs)
